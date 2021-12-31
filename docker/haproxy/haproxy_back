@@ -1,0 +1,55 @@
+global
+  log devlog  local0  
+  log devlog  local1 notice
+  chroot varlibhaproxy
+  stats socket runhaproxyadmin.sock mode 660 level admin expose-fd listeners
+  stats timeout 30s
+  user haproxy
+  group haproxy
+  daemon
+
+  # Default SSL material locations
+  ca-base etcsslcerts
+  crt-base etcsslprivate
+
+  # Default ciphers to use on SSL-enabled listening sockets.
+  # For more information, see ciphers(1SSL). This list is from
+  #  httpshynek.mearticleshardening-your-web-servers-ssl-ciphers
+  # An alternative list with additional directives can be obtained from
+  #  httpsmozilla.github.ioserver-side-tlsssl-config-generatorserver=haproxy
+  ssl-default-bind-ciphers ECDH+AESGCMDH+AESGCMECDH+AES256DH+AES256ECDH+AES128DH+AESRSA+AESGCMRSA+AES!aNULL!MD5!DSS  ssl-default-bind-options no-sslv3
+
+defaults
+  log global
+  mode  http    
+  option  httplog
+  option  dontlognull
+  timeout connect 5000
+  timeout client  50000
+  errorfile 400 etchaproxyerrors400.http
+  errorfile 403 etchaproxyerrors403.http
+  errorfile 408 etchaproxyerrors408.http
+  errorfile 500 etchaproxyerrors500.http
+  errorfile 502 etchaproxyerrors502.http
+  errorfile 503 etchaproxyerrors503.http
+  errorfile 504 etchaproxyerrors504.http
+
+
+listen stats
+  bind  :9000
+  mode  http
+  
+  stats enable
+  stats uri /haproxy_stats
+  stats auth  admin:admin
+  
+listen  web
+  bind  *:80
+  mode  http
+  
+  balance roundrobin
+  option  httpchk HEAD  / HTTP/1.1\r\nHost:\ localhost
+  
+  server  test1  127.0.0.1:6000  check fall 3  rise 2
+  server  test2  127.0.0.1:7000  check fall 3  rise 2
+  server  test3  127.0.0.1:8000  check fall 3  rise 2

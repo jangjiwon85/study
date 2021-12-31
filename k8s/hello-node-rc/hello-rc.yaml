@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata: 
+  name: hello-rc
+spec: 
+  replicas: 3 
+  selector: 
+    app: hello-set
+  template:
+    metadata:
+      name: hello-rc
+      labels: 
+        app: hello-set
+    spec:
+      containers:
+      - name: hello-pod
+        image: unisweet/hello-node:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080

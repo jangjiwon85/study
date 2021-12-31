@@ -1,0 +1,53 @@
+global
+  log devlog  local0  
+  log devlog  local1 notice
+  chroot varlibhaproxy
+  stats socket runhaproxyadmin.sock mode 660 level admin expose-fd listeners
+  stats timeout 30s
+  user haproxy
+  group haproxy
+  daemon
+
+defaults
+  mode                    http
+  log                     global
+  retries                 3
+  timeout http-request    10s
+  timeout queue           1m
+  timeout connect         5s
+  timeout client          5s
+  timeout server          5s
+  timeout http-keep-alive 10s
+  timeout check           10s
+  maxconn                 10000
+  errorfile 400 etchaproxyerrors400.http
+  errorfile 403 etchaproxyerrors403.http
+  errorfile 408 etchaproxyerrors408.http
+  errorfile 500 etchaproxyerrors500.http
+  errorfile 502 etchaproxyerrors502.http
+  errorfile 503 etchaproxyerrors503.http
+  errorfile 504 etchaproxyerrors504.http
+
+frontend api_gateway
+    bind *:88
+    acl PATH_aa path_beg -i /index.jsp
+    acl PATH_bb path_beg -i /bb
+
+    use_backend be_aa if PATH_aa
+    use_backend be_bb if PATH_bb
+
+	default_backend be_etc
+
+backend be_aa
+    server test1 127.0.0.1:6000 check
+    server test2 127.0.0.1:7000 check
+    server test3 127.0.0.1:8000 check
+
+
+
+
+backend be_bb
+    server server1 host.docker.internal:9992 check
+
+backend be_etc
+    server server1 host.docker.internal:9993 check

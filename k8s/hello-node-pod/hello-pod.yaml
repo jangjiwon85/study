@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: hello-pod
+spec: 
+#  selector:
+#    app: hello-svc-pod
+  containers:
+    - name: hello-pod
+      image: unisweet/hello-node:v1
+      imagePullPolicy: Always
+      ports:
+      - containerPort: 8080
