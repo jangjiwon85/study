@@ -17,3 +17,5 @@ def solution(arr):
             answer.append(arr[i])
 
     return answer
+
+print(solution()[4])
