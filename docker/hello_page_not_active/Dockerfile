@@ -1,5 +1,4 @@
-FROM openjdk:19-jdk-alpine3.16
-
+FROM openjdk:8-jdk-alpine
 RUN apk --no-cache add tzdata && cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 WORKDIR /app
@@ -9,4 +8,4 @@ RUN chmod 774 run.sh
 
 ENV PROFILE=local
 
-ENTRYPOINT ["./run.sh"]
+#ENTRYPOINT ["./run.sh"]
