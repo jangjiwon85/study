@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "docker"
+		},
+		{
+			"path": "Test_code"
 		}
 	],
 	"settings": {}
