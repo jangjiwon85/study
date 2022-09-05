@@ -9,4 +9,4 @@ RUN chmod 774 run.sh
 
 ENV PROFILE=local
 
-ENTRYPOINT ["./run.sh"]
+#ENTRYPOINT ["run.sh"]
