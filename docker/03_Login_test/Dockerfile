@@ -11,4 +11,4 @@ COPY ROOT.war /usr/local/tomcat/webapps/
 ENV JAVA_OPTS="-Dserver.type=dev" 
 
 COPY entrypoint.sh run.sh
-RUN chmod 774 run.sh
+RUN chmod 774 run.sh aaa
